@@ -1,10 +1,21 @@
 import * as z from "zod";
 
+/**
+ * --- Regular Expressions ---
+ * nameRegex: Supports Arabic and Latin characters plus spaces.
+ * passwordRegex: Enforces strong passwords (Upper, Lower, Number, Special Char).
+ * phoneRegex: Validates international phone formats.
+ */
 const nameRegex = /^[\u0600-\u06FFa-zA-Z\s]+$/;
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
 const phoneRegex = /^\+?[0-9]{10,15}$/;
 
+/**
+ * Register Schema
+ * Comprehensive validation for user registration.
+ * Includes a refinement check to ensure password confirmation matches.
+ */
 export const registerSchema = z
   .object({
     name: z
@@ -51,13 +62,21 @@ export const registerSchema = z
         message: "You must agree to the terms and conditions.",
       }),
   })
+  /**
+   * Cross-field validation:
+   * Ensures 'password' and 'rePassword' are identical.
+   */
   .refine((data) => data.password === data.rePassword, {
     message: "Passwords do not match.",
-    path: ["rePassword"],
+    path: ["rePassword"], // Sets the error specifically on the rePassword field
   });
 
 export type RegisterFormValues = z.infer<typeof registerSchema>;
 
+/**
+ * Login Schema
+ * Minimal validation required for authenticating existing users.
+ */
 export const loginSchema = z.object({
   email: z
     .string()
@@ -75,7 +94,8 @@ export const loginSchema = z.object({
       message:
         "Password must contain at least one uppercase, lowercase, number, and special character.",
     }),
-    rememberMe: z.boolean().default(false),
+
+  rememberMe: z.boolean().default(false),
 });
 
 export type LoginFormData = z.infer<typeof loginSchema>;

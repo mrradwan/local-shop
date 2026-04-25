@@ -20,17 +20,21 @@ interface ClearCartButtonProps {
 }
 
 export default function ClearCartButton({ onUpdate }: ClearCartButtonProps) {
-        const {getCartData} = useContext(CartContext)
-    
-  // 1. للتحكم في فتح وقفل المودال
+  const { getCartData } = useContext(CartContext);
+
+  // Modal open/close state
   const [isOpen, setIsOpen] = useState(false);
-  // 2. للتحكم في اللودر
+  // Loading state for the clearing process
   const [isClearing, setIsClearing] = useState(false);
-  // 3. للتحكم في إظهار رسالة النجاح
+  // Success state to show the confirmation message
   const [isSuccess, setIsSuccess] = useState(false);
 
+  /**
+   * Handles the request to clear all items from the cart
+   * @param e - Mouse event to manage modal behavior
+   */
   async function handleClearCart(e: React.MouseEvent) {
-    // 👈 السطر ده هو السحر: بيمنع المودال إنه يقفل أوتوماتيك أول ما تدوس
+    // Prevent the modal from closing automatically upon clicking
     e.preventDefault();
 
     try {
@@ -38,12 +42,13 @@ export default function ClearCartButton({ onUpdate }: ClearCartButtonProps) {
       const response = await clearCart();
 
       if (response.status === "success") {
-        setIsSuccess(true); // نقلب شكل المودال لرسالة النجاح
-          getCartData()
-        // نستنى ثانية ونص عشان اليوزر يشوف النجاح، وبعدين نقفل المودال ونعمل ريفرش للسلة
+        setIsSuccess(true); // Switch modal view to success state
+        getCartData(); // Sync navbar cart count
+
+        // Wait for 1.5s so the user sees the success message, then close and refresh
         setTimeout(() => {
           setIsOpen(false);
-          setIsSuccess(false); // نرجعه لحالته الأصلية للمرات الجاية
+          setIsSuccess(false); // Reset for future use
           onUpdate();
         }, 1500);
       }
@@ -58,7 +63,7 @@ export default function ClearCartButton({ onUpdate }: ClearCartButtonProps) {
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger
         disabled={isClearing}
-        className="group flex items-center text-sm text-gray-400 hover:text-red-500 transition-colors disabled:opacity-50 cursor-pointer"
+        className="group flex items-center text-sm text-gray-400 hover:text-red-500 transition-colors disabled:opacity-50 cursor-pointer border-none outline-none bg-transparent"
       >
         {isClearing ? (
           <Loader2 className="animate-spin mr-2" size={16} />
@@ -70,7 +75,7 @@ export default function ClearCartButton({ onUpdate }: ClearCartButtonProps) {
 
       <AlertDialogContent>
         {isSuccess ? (
-          // 🌟 حالة النجاح (بعد ما يتم المسح)
+          /* Success View: Displayed after cart is successfully cleared */
           <div className="flex flex-col items-center justify-center py-6 text-center">
             <CheckCircle2 className="w-16 h-16 text-green-500 mb-4 animate-bounce" />
             <AlertDialogTitle className="text-xl">
@@ -81,7 +86,7 @@ export default function ClearCartButton({ onUpdate }: ClearCartButtonProps) {
             </AlertDialogDescription>
           </div>
         ) : (
-          // 🌟 الحالة العادية (تأكيد المسح)
+          /* Confirmation View: Initial state before clearing */
           <>
             <AlertDialogHeader>
               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
@@ -91,16 +96,19 @@ export default function ClearCartButton({ onUpdate }: ClearCartButtonProps) {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel disabled={isClearing}>
+              <AlertDialogCancel
+                disabled={isClearing}
+                className="cursor-pointer"
+              >
                 Cancel
               </AlertDialogCancel>
 
               <AlertDialogAction
                 onClick={handleClearCart}
                 disabled={isClearing}
-                className="bg-red-600 hover:bg-red-700 text-white w-32 flex justify-center transition-all"
+                className="bg-red-600 hover:bg-red-700 text-white w-32 flex justify-center transition-all cursor-pointer"
               >
-                {/* 👇 لو بيحمل، هنعرض سبينر، لو لأ هنعرض النص العادي 👇 */}
+                {/* Show spinner during API call, otherwise show text */}
                 {isClearing ? (
                   <Loader2 className="animate-spin" size={18} />
                 ) : (

@@ -21,6 +21,7 @@ import { signIn } from "next-auth/react";
 export default function Login() {
   const router = useRouter();
 
+  // Initialize form with Zod validation schema
   const form = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -32,12 +33,17 @@ export default function Login() {
 
   const { isSubmitting } = form.formState;
 
+  /**
+   * Handle form submission using NextAuth signIn
+   * @param data - The validated login form data
+   */
   async function onSubmitLogin(data: LoginFormData) {
     const response = await signIn("credentials", {
       email: data.email,
       password: data.password,
       redirect: false,
     });
+
     if (response?.ok) {
       router.push("/products");
       toast.success("Login successful!");
@@ -50,11 +56,12 @@ export default function Login() {
     <>
       <div className="container py-16 mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
+          {/* Left Side: Marketing and Visuals */}
           <div className="hidden lg:block">
             <div className="text-center space-y-6">
               <Image
                 src="/image/login.png"
-                alt="Login"
+                alt="Login Illustration"
                 width={400}
                 height={300}
                 className="w-full h-96 object-cover rounded-2xl shadow-lg"
@@ -67,6 +74,8 @@ export default function Login() {
                   Join thousands of happy customers who trust FreshCart for
                   their daily grocery needs
                 </p>
+
+                {/* Trust Badges */}
                 <div className="flex items-center justify-center space-x-8 text-sm text-gray-500">
                   <div className="flex items-center">
                     <Truck className="text-green-600 mr-2" size={18} />
@@ -85,8 +94,10 @@ export default function Login() {
             </div>
           </div>
 
+          {/* Right Side: Login Form */}
           <div className="w-full">
             <div className="bg-white rounded-2xl shadow-xl p-8 lg:p-12">
+              {/* Form Header */}
               <div className="text-center mb-8">
                 <div className="flex items-center justify-center mb-4">
                   <span className="text-3xl font-bold text-green-600">
@@ -101,6 +112,7 @@ export default function Login() {
                 </p>
               </div>
 
+              {/* Social Login Buttons */}
               <div className="space-y-3 mb-6">
                 <Button
                   type="button"
@@ -122,6 +134,7 @@ export default function Login() {
                 </Button>
               </div>
 
+              {/* Divider */}
               <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-200"></div>
@@ -133,10 +146,12 @@ export default function Login() {
                 </div>
               </div>
 
+              {/* Main Login Form */}
               <form
                 onSubmit={form.handleSubmit(onSubmitLogin)}
                 className="space-y-5"
               >
+                {/* Email Field */}
                 <Controller
                   name="email"
                   control={form.control}
@@ -158,6 +173,7 @@ export default function Login() {
                   )}
                 />
 
+                {/* Password Field */}
                 <Controller
                   name="password"
                   control={form.control}
@@ -166,7 +182,7 @@ export default function Login() {
                       <div className="flex items-center justify-between">
                         <FieldLabel htmlFor={field.name}>Password*</FieldLabel>
                         <Link
-                          href="/forgot-password"
+                          href="/forget-password"
                           className="text-sm text-green-600 hover:text-green-700 hover:underline font-medium"
                         >
                           Forgot password?
@@ -184,6 +200,8 @@ export default function Login() {
                     </Field>
                   )}
                 />
+
+                {/* Remember Me Checkbox */}
                 <Controller
                   name="rememberMe"
                   control={form.control}
@@ -193,7 +211,7 @@ export default function Login() {
                         id="rememberMe"
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        className="data-checked:border-green-600 data-checked:bg-green-600 data-checked:text-white dark:data-checked:bg-green-600 cursor-pointer"
+                        className="data-checked:border-green-600 data-checked:bg-green-600 data-checked:text-white cursor-pointer"
                       />
                       <Label
                         htmlFor="rememberMe"
@@ -204,16 +222,19 @@ export default function Login() {
                     </div>
                   )}
                 />
+
+                {/* Submit Button */}
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-green-600 text-white hover:bg-green-700 transition-colors py-6 text-lg rounded-xl mt-4"
+                  className="w-full bg-green-600 text-white hover:bg-green-700 transition-colors py-6 text-lg rounded-xl mt-4 cursor-pointer"
                 >
                   {isSubmitting && <Spinner data-icon="inline-start" />}
                   <span>{isSubmitting ? "Signing in..." : "Sign In"}</span>
                 </Button>
               </form>
 
+              {/* Registration Link */}
               <div className="text-center mt-8 pt-6 border-t border-gray-100">
                 <p className="text-gray-600">
                   New to FreshCart?
@@ -226,6 +247,7 @@ export default function Login() {
                 </p>
               </div>
 
+              {/* Security and Social Proof Footer */}
               <div className="flex items-center justify-center space-x-6 mt-6 text-xs text-gray-500">
                 <div className="flex items-center">
                   <FaLock className="mr-1 text-gray-500" size={12} />

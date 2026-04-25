@@ -32,28 +32,34 @@ interface CartItemProps {
 }
 
 export default function CartItem({ item, onUpdate }: CartItemProps) {
-  const { product, count, price, _id } = item;
+  const { product, count, price } = item;
   const { getCartData } = useContext(CartContext);
 
-  // State للتحميل بتاع الكميات (زائد وناقص)
+  // Loading state for quantity updates (plus/minus buttons)
   const [isLoading, setIsLoading] = useState(false);
 
-  // States الخاصة بمودال المسح
+  // States for item removal process and confirmation dialog
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
   const [isRemoveSuccess, setIsRemoveSuccess] = useState(false);
 
+  // Calculate total price for this specific item
   const totalPrice = price * count;
 
+  /**
+   * Increments product quantity by 1
+   */
   async function handleIncrease() {
     setIsLoading(true);
     await updateCartItemQuantity(product.id, count + 1);
-    await onUpdate();
-    getCartData();
-
+    await onUpdate(); // Refresh cart page data
+    getCartData(); // Refresh navbar badge count
     setIsLoading(false);
   }
 
+  /**
+   * Decrements product quantity or triggers removal dialog if count is 1
+   */
   async function handleDecrease() {
     setIsLoading(true);
     if (count > 1) {
@@ -61,24 +67,27 @@ export default function CartItem({ item, onUpdate }: CartItemProps) {
       await onUpdate();
       getCartData();
     } else {
-      // لو الكمية 1 وهينقص، نفتح مودال التأكيد
+      // Open removal confirmation if trying to decrease below 1
       setIsDialogOpen(true);
     }
     setIsLoading(false);
   }
 
-  // دالة المسح المربوطة بالمودال
+  /**
+   * Handles the actual item removal from the API
+   * @param e - Mouse event to prevent default behavior
+   */
   async function handleRemove(e: React.MouseEvent) {
-    e.preventDefault(); // نمنع القفل التلقائي
+    e.preventDefault();
 
     try {
       setIsRemoving(true);
       await removeCartItem(product.id);
-      getCartData();
+      getCartData(); // Sync navbar count
 
-      setIsRemoveSuccess(true); // نظهر علامة الصح
+      setIsRemoveSuccess(true); // Show success animation
 
-      // نقفل المودال بعد ثانية ونص ونحدث السلة
+      // Close dialog and refresh UI after a brief delay
       setTimeout(() => {
         setIsDialogOpen(false);
         setIsRemoveSuccess(false);
@@ -97,7 +106,7 @@ export default function CartItem({ item, onUpdate }: CartItemProps) {
     >
       <div className="p-4 sm:p-5">
         <div className="flex gap-4 sm:gap-6">
-          {/* الصورة */}
+          {/* Product Thumbnail Section */}
           <Link
             href={`/products/${product.id}`}
             className="relative shrink-0 group"
@@ -116,7 +125,7 @@ export default function CartItem({ item, onUpdate }: CartItemProps) {
             </div>
           </Link>
 
-          {/* التفاصيل */}
+          {/* Product Info Section */}
           <div className="flex-1 min-w-0 flex flex-col">
             <div className="mb-3">
               <Link href={`/products/${product.id}`} className="group/title">
@@ -129,10 +138,13 @@ export default function CartItem({ item, onUpdate }: CartItemProps) {
                   {product.category.name}
                 </span>
                 <span className="text-xs text-gray-400">•</span>
-                <span className="text-xs text-gray-500">SKU: 5CA0B9</span>
+                <span className="text-xs text-gray-500">
+                  SKU: {product.id.slice(-6).toUpperCase()}
+                </span>
               </div>
             </div>
 
+            {/* Price Display */}
             <div className="mb-4">
               <div className="flex items-baseline gap-2">
                 <span className="text-green-600 font-bold text-lg">
@@ -144,8 +156,9 @@ export default function CartItem({ item, onUpdate }: CartItemProps) {
               </div>
             </div>
 
+            {/* Controls Bar */}
             <div className="mt-auto flex flex-wrap items-center justify-between gap-4">
-              {/* الـ Quantity Selector */}
+              {/* Quantity Selector */}
               <div className="flex items-center justify-between border border-gray-200 rounded-full w-28 h-9 px-1 bg-white shadow-sm">
                 <Button
                   onClick={handleDecrease}
@@ -173,21 +186,21 @@ export default function CartItem({ item, onUpdate }: CartItemProps) {
                 </Button>
               </div>
 
+              {/* Total and Delete Action */}
               <div className="flex items-center gap-4">
-                {/* السعر الإجمالي للمنتج ده */}
                 <div className="text-sm font-semibold text-green-600 bg-green-50 px-3 py-1.5 rounded-lg">
                   Total: {totalPrice} EGP
                 </div>
 
-                {/* زرار المسح المربوط بالمودال المطور */}
+                {/* Removal Confirmation Dialog */}
                 <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                  <AlertDialogTrigger className="text-gray-400 hover:text-red-500 transition-colors p-1 cursor-pointer">
+                  <AlertDialogTrigger className="text-gray-400 hover:text-red-500 transition-colors p-1 cursor-pointer border-none outline-none bg-transparent">
                     <Trash2 size={18} />
                   </AlertDialogTrigger>
 
                   <AlertDialogContent>
                     {isRemoveSuccess ? (
-                      // حالة النجاح
+                      /* Removal Success UI */
                       <div className="flex flex-col items-center justify-center py-6 text-center">
                         <CheckCircle2 className="w-16 h-16 text-green-500 mb-4 animate-bounce" />
                         <AlertDialogTitle className="text-xl">
@@ -199,6 +212,7 @@ export default function CartItem({ item, onUpdate }: CartItemProps) {
                         </AlertDialogDescription>
                       </div>
                     ) : (
+                      /* Confirmation UI */
                       <>
                         <AlertDialogHeader>
                           <AlertDialogTitle>Remove Product</AlertDialogTitle>
@@ -211,13 +225,16 @@ export default function CartItem({ item, onUpdate }: CartItemProps) {
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                          <AlertDialogCancel disabled={isRemoving}>
+                          <AlertDialogCancel
+                            disabled={isRemoving}
+                            className="cursor-pointer"
+                          >
                             Keep it
                           </AlertDialogCancel>
                           <AlertDialogAction
                             onClick={handleRemove}
                             disabled={isRemoving}
-                            className="bg-red-600 hover:bg-red-700 text-white w-28 flex justify-center transition-all"
+                            className="bg-red-600 hover:bg-red-700 text-white w-28 flex justify-center transition-all cursor-pointer"
                           >
                             {isRemoving ? (
                               <Loader2 className="animate-spin" size={18} />

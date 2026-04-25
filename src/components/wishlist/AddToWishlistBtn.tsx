@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useContext, useState } from "react";
 import { Button } from "../ui/button";
 import { Heart } from "lucide-react";
@@ -15,40 +16,49 @@ interface AddToWishlistBtnProps {
   variant?: "icon" | "text" | "outlineText";
 }
 
+/**
+ * AddToWishlistBtn Component
+ * Provides a dynamic button to add or remove products from the user's wishlist.
+ * Synchronizes with WishlistContext to reflect real-time changes across the UI.
+ */
 export default function AddToWishlistBtn({
   prodId,
   variant = "icon",
 }: AddToWishlistBtnProps) {
-  // بنجيب الداتا من الكونتكست
+  // Access global wishlist state and refresh function from context
   const { wishlistItems, refreshWishlist } = useContext(WishlistContext);
   const [isloading, setIsloading] = useState(false);
 
-  // السطر السحري: هل الـ ID ده موجود جوه المصفوفة؟
+  // Determine if the product ID exists in the global wishlist array
   const isAlreadyInWishlist = wishlistItems.includes(prodId);
 
+  /**
+   * Main handler for Wishlist interactions:
+   * Triggers a Toggle logic (Removes if present, Adds if absent).
+   */
   async function handleWishlistAction() {
-    // 🌟 اللوجيك الجديد: لو المنتج موجود، امسحه
+    // Logic: If item is in wishlist, trigger removal action
     if (isAlreadyInWishlist) {
       try {
         setIsloading(true);
         await removeWishlistItem(prodId);
         toast.success("Product removed from wishlist");
-        await refreshWishlist(); // تحديث الرقم والمصفوفة
+        await refreshWishlist(); // Sync global state and update counters
       } catch (error) {
         toast.error("Error removing item");
       } finally {
         setIsloading(false);
       }
-      return; // بنوقف الفانكشن هنا عشان ميكملش ويضيفه تاني
+      return; // Exit function after removal
     }
 
-    // 🌟 لو المنتج مش موجود، ضيفه
+    // Logic: If item is not in wishlist, trigger addition action
     try {
       setIsloading(true);
       const response = await addProductToWishlist(prodId);
       if (response.status === "success") {
         toast.success(response.message);
-        await refreshWishlist(); // تحديث الرقم والمصفوفة
+        await refreshWishlist(); // Sync global state
       } else {
         toast.error("Something went wrong");
       }
@@ -59,12 +69,12 @@ export default function AddToWishlistBtn({
     }
   }
 
-  // 🌟 لو الزرار نص كبير
+  // View: Detailed Button with Text Label
   if (variant === "text") {
     return (
       <Button
         disabled={isloading}
-        className={`flex-1 py-3.5 px-6 rounded-xl font-medium transition-all flex items-center justify-center gap-2 shadow-sm
+        className={`flex-1 py-3.5 px-6 rounded-xl font-medium transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer border-none outline-none
           ${
             isAlreadyInWishlist
               ? "bg-red-50 text-red-600 hover:bg-red-100 border border-red-200"
@@ -77,6 +87,7 @@ export default function AddToWishlistBtn({
         ) : (
           <Heart
             size={20}
+            /* Fill heart icon if item is already saved */
             fill={isAlreadyInWishlist ? "currentColor" : "none"}
           />
         )}
@@ -87,13 +98,13 @@ export default function AddToWishlistBtn({
     );
   }
 
-  // 🌟 لو الزرار أيقونة بس
+  // View: Compact Icon-only Button (Ideal for Product Cards)
   return (
     <Button
       disabled={isloading}
       variant="outline"
       size="icon"
-      className={`transition-colors rounded-full shrink-0 shadow-sm
+      className={`transition-colors rounded-full shrink-0 shadow-sm border-none outline-none cursor-pointer
         ${
           isAlreadyInWishlist
             ? "bg-red-50 text-red-500 border-red-200 hover:bg-red-100"

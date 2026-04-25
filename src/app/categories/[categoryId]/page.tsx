@@ -6,17 +6,24 @@ import {
   getSubcategoriesOnCategory,
 } from "@/services/category.service";
 import { SubCategory } from "@/types/subcategory.type";
-import PageHeader from "@/components/shared/PageHeader"; // 🌟 استدعينا الهيدر بتاعنا
+import PageHeader from "@/components/shared/PageHeader";
 
 interface CategoryPageProps {
-  params: Promise<{ categoryId: string }>; // 👈 ظبطنا التايب بتاع Promise
+  params: Promise<{ categoryId: string }>; // Typed as Promise for Next.js 15+ compatibility
 }
 
-export default async function SpecificCategoryPage({ params }: CategoryPageProps) {
+/**
+ * Specific Category Details Page - Server Component
+ * Fetches category info and its subcategories based on the URL parameter
+ */
+export default async function SpecificCategoryPage({
+  params,
+}: CategoryPageProps) {
+  // Resolve the dynamic route parameters
   const resolvedParams = await params;
   const categoryId = resolvedParams.categoryId;
 
-  // بنطلب الداتا في نفس اللحظة
+  // Execute data fetching in parallel for better performance
   const [categoryRes, subcategoriesRes] = await Promise.all([
     getCategoryById(categoryId),
     getSubcategoriesOnCategory(categoryId),
@@ -25,6 +32,7 @@ export default async function SpecificCategoryPage({ params }: CategoryPageProps
   const category = categoryRes?.data;
   const subcategories = subcategoriesRes?.data || [];
 
+  // Guard clause for missing category data
   if (!category) {
     return (
       <div className="text-center py-20 text-xl font-bold">
@@ -33,7 +41,7 @@ export default async function SpecificCategoryPage({ params }: CategoryPageProps
     );
   }
 
-  // 🌟 بنجهز الداتا اللي الـ PageHeader محتاجها
+  // Configuration for the shared PageHeader component
   const pageDetails = {
     title: category.name,
     parentName: "Categories",
@@ -44,19 +52,20 @@ export default async function SpecificCategoryPage({ params }: CategoryPageProps
 
   return (
     <div className="min-h-screen bg-gray-50/50">
-      
-      {/* 🌟 1. الهيدر في سطر واحد بس! بدل 50 سطر */}
+      {/* Dynamic Page Header with breadcrumbs and filters enabled */}
       <PageHeader details={pageDetails} hasFilters={true} />
 
       <div className="container mx-auto px-4 py-10">
-        
-        {/* زرار الرجوع والعدد */}
+        {/* Navigation actions and item count */}
         <div className="flex items-center justify-between mb-6">
           <Link
             href="/categories"
             className="group inline-flex items-center gap-2 text-gray-600 hover:text-green-600 transition-colors"
           >
-            <ArrowLeft size={18} className="group-hover:-translate-x-1 duration-300 ease-in-out" />
+            <ArrowLeft
+              size={18}
+              className="group-hover:-translate-x-1 duration-300 ease-in-out"
+            />
             <span>Back to Categories</span>
           </Link>
           <div className="text-sm font-medium text-gray-500">
@@ -64,7 +73,7 @@ export default async function SpecificCategoryPage({ params }: CategoryPageProps
           </div>
         </div>
 
-        {/* 🌟 عرض الأقسام الفرعية */}
+        {/* Dynamic content rendering for subcategories */}
         {subcategories.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {subcategories.map((sub: SubCategory) => (
@@ -73,7 +82,7 @@ export default async function SpecificCategoryPage({ params }: CategoryPageProps
                 href={`/products?category=${categoryId}&subcategory=${sub._id}`}
                 className="group flex items-center justify-between p-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-green-200 transition-all duration-300 hover:-translate-y-1"
               >
-                {/* 🌟 ظبطتلك الـ Layout بتاع الكارت عشان يبقى الفولدر والاسم جنب بعض شكلهم احترافي */}
+                {/* Visual indicator and name */}
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center group-hover:bg-green-100 transition-colors shrink-0">
                     <FolderOpen className="text-green-600" size={24} />
@@ -82,7 +91,8 @@ export default async function SpecificCategoryPage({ params }: CategoryPageProps
                     {sub.name}
                   </span>
                 </div>
-                
+
+                {/* Forward arrow indicator */}
                 <div className="w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center group-hover:bg-green-600 group-hover:text-white transition-colors shrink-0">
                   <ChevronRight size={16} />
                 </div>
@@ -90,6 +100,7 @@ export default async function SpecificCategoryPage({ params }: CategoryPageProps
             ))}
           </div>
         ) : (
+          /* Empty state for categories with no subcategories */
           <div className="text-center py-16 bg-white rounded-2xl border border-gray-100 shadow-sm">
             <FolderOpen size={48} className="mx-auto text-gray-300 mb-4" />
             <p className="text-gray-500 font-medium">

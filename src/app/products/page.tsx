@@ -9,9 +9,17 @@ interface ProductsPageProps {
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }
 
-// 🌟 الدالة كاملة أهي بتجيب الداتا والصور والاسم
-async function getPageDetails(category?: string, subcategory?: string, brand?: string) {
-const configs = [
+/**
+ * Dynamic helper to fetch metadata (title, image, breadcrumbs)
+ * based on the active filter (category, subcategory, or brand).
+ */
+async function getPageDetails(
+  category?: string,
+  subcategory?: string,
+  brand?: string,
+) {
+  // Define configurations for different filter scenarios
+  const configs = [
     {
       id: brand,
       endpoint: `brands/${brand}`,
@@ -35,18 +43,20 @@ const configs = [
       parentLink: "/categories",
       defaultTitle: "Category Products",
       icon: <Folder size={28} className="text-white" />,
-    }
+    },
   ];
 
-  // 2. بندور على أول حالة شغالة (يعني الـ id بتاعها مش undefined)
-  const activeConfig = configs.find(config => config.id);
+  // Find the first active filter configuration
+  const activeConfig = configs.find((config) => config.id);
 
-  // 3. لو لقينا حالة، هنعمل الـ fetch مرة واحدة بس!
+  // Fetch specific details from API if a filter is active
   if (activeConfig) {
     try {
-      const res = await fetch(`https://ecommerce.routemisr.com/api/v1/${activeConfig.endpoint}`);
+      const res = await fetch(
+        `https://ecommerce.routemisr.com/api/v1/${activeConfig.endpoint}`,
+      );
       const data = await res.json();
-      
+
       return {
         title: data?.data?.name || activeConfig.defaultTitle,
         parentName: activeConfig.parentName,
@@ -55,11 +65,11 @@ const configs = [
         icon: activeConfig.icon,
       };
     } catch (error) {
-      console.error("Error fetching details:", error);
+      console.error("Error fetching page details:", error);
     }
   }
 
-  // 4. الحالة الافتراضية (لو مفيش أي فلاتر أو حصل إيرور)
+  // Fallback state for "All Products" view
   return {
     title: "All Products",
     parentName: "Products",
@@ -69,30 +79,33 @@ const configs = [
   };
 }
 
-
 export default async function Products({ searchParams }: ProductsPageProps) {
+  // Resolve search parameters for server-side usage
   const resolvedSearchParams = await searchParams;
 
   const category = resolvedSearchParams.category;
   const subcategory = resolvedSearchParams.subcategory;
   const brand = resolvedSearchParams.brand;
 
+  // Execute both product fetching and metadata fetching concurrently
   const [products, pageDetails] = await Promise.all([
-    getAllProducts({ category, subcategory, brand }),
-    getPageDetails(category, subcategory, brand)
+    getAllProducts({
+      "category[in]": category,
+      subcategory: subcategory,
+      "brand[in]": brand,
+    }),
+    getPageDetails(category, subcategory, brand),
   ]);
 
   const hasFilters = !!(category || subcategory || brand);
 
   return (
     <div className="min-h-screen bg-white pb-10">
-      
-      {/* 🌟 1. الهيدر المشترك (بنديله الداتا وهو بيرسم نفسه) */}
+      {/* 1. Shared Page Header Component */}
       <PageHeader details={pageDetails} hasFilters={hasFilters} />
 
       <div className="container mx-auto px-4 py-8">
-        
-        {/* 🌟 2. الفلاتر النشطة */}
+        {/* 2. Active Filters Display Section */}
         {hasFilters && (
           <div className="flex items-center gap-4 mb-6 border-b border-gray-100 pb-6">
             <div className="flex items-center gap-2 text-gray-700 text-sm font-medium">
@@ -104,7 +117,10 @@ export default async function Products({ searchParams }: ProductsPageProps) {
                 <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-50 text-green-700 text-sm font-medium hover:bg-green-100 transition-colors border border-green-100">
                   {brand ? <Tag size={14} /> : <Folder size={14} />}
                   {pageDetails.title}
-                  <X size={14} className="cursor-pointer hover:text-red-500 transition-colors" />
+                  <X
+                    size={14}
+                    className="cursor-pointer hover:text-red-500 transition-colors"
+                  />
                 </span>
               </Link>
 
@@ -118,7 +134,7 @@ export default async function Products({ searchParams }: ProductsPageProps) {
           </div>
         )}
 
-        {/* 🌟 3. عرض المنتجات أو الشاشة الفاضية */}
+        {/* 3. Product Grid or Empty State Rendering */}
         {products.length === 0 ? (
           <EmptyState />
         ) : (

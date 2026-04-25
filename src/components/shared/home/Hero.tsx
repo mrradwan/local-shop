@@ -1,16 +1,25 @@
 "use client";
+
 import { motion } from "framer-motion";
 import { ShoppingBag } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+/**
+ * Hero Component
+ * The main introductory section of the home page.
+ * Uses Framer Motion for entrance animations and Tailwind for decorative backgrounds.
+ */
 export default function Hero() {
   return (
     <section className="relative h-[80vh] flex items-center bg-gray-50 overflow-hidden">
-      {/* خلفية جمالية (Animated Shapes) */}
-      <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-125 h-125 bg-green-100 rounded-full blur-3xl opacity-50" />
+      
+      {/* Decorative Background: Animated blurred shapes for visual depth */}
+      <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-125 h-125 bg-green-100 rounded-full blur-3xl opacity-50 pointer-events-none" />
 
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-10 items-center relative z-10">
+        
+        {/* Content Side: Text and Calls to Action (CTA) */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -27,23 +36,27 @@ export default function Hero() {
             Get your daily needs from our store with the best quality and
             fastest delivery in town.
           </p>
-          <div className="flex gap-4">
+          
+          <div className="flex flex-wrap gap-4">
+            {/* Primary Action */}
             <Link
               href="/products"
-              className="bg-green-600 text-white px-8 py-4 rounded-2xl font-bold flex items-center gap-2 hover:bg-green-700 transition-all hover:shadow-lg hover:shadow-green-200"
+              className="bg-green-600 text-white px-8 py-4 rounded-2xl font-bold flex items-center gap-2 hover:bg-green-700 transition-all hover:shadow-lg hover:shadow-green-200 border-none outline-none"
             >
               Shop Now <ShoppingBag size={20} />
             </Link>
+            
+            {/* Secondary Action */}
             <Link
               href="/categories"
-              className="bg-white text-gray-800 border border-gray-200 px-8 py-4 rounded-2xl font-bold hover:bg-gray-50 transition-all"
+              className="bg-white text-gray-800 border border-gray-200 px-8 py-4 rounded-2xl font-bold hover:bg-gray-50 transition-all shadow-sm"
             >
               View Categories
             </Link>
           </div>
         </motion.div>
 
-        {/* هنا ممكن تحط صورة كبيرة بـ Animation لطيف */}
+        {/* Visual Side: Hero Image with decorative borders and animations */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -51,15 +64,18 @@ export default function Hero() {
           className="hidden md:block relative"
         >
           <div className="relative w-full h-125">
-            {/* حط هنا صورة بطل (Hero Image) */}
+            {/* Decorative offset background card */}
             <div className="absolute inset-0 bg-green-600/5 rounded-3xl rotate-3" />
-            <div className="absolute inset-0 bg-white border border-gray-100 rounded-3xl shadow-2xl flex items-center justify-center">
+            
+            {/* Main Image Container */}
+            <div className="absolute inset-0 bg-white border border-gray-100 rounded-3xl shadow-2xl flex items-center justify-center overflow-hidden">
               <Image
                 src="/image/hero.png"
-                alt="Login"
-                width={400}
-                height={400}
-                className="w-full h-125 object-cover rounded-2xl shadow-lg"
+                alt="Fresh Grocery Delivery"
+                width={600} // Optimized dimensions
+                height={600}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                priority // Load immediately as it's the LCP element
               />
             </div>
           </div>

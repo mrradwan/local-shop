@@ -25,19 +25,27 @@ interface WishlistItemProps {
 }
 
 export default function WishlistItem({ item, onUpdate }: WishlistItemProps) {
+  // Context to sync global wishlist state (e.g., navbar badge)
   const { refreshWishlist } = useContext(WishlistContext);
+
+  // Local UI states for removal process
   const [isRemoving, setIsRemoving] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isRemoveSuccess, setIsRemoveSuccess] = useState(false);
 
+  /**
+   * Handles item removal from the wishlist with visual feedback
+   */
   async function handleRemove(e: React.MouseEvent) {
     e.preventDefault();
     try {
       setIsRemoving(true);
       await removeWishlistItem(item.id);
-      await refreshWishlist();
-      setIsRemoveSuccess(true);
+      await refreshWishlist(); // Update global counter
 
+      setIsRemoveSuccess(true); // Show success animation
+
+      // Auto-close dialog and refresh page data after delay
       setTimeout(() => {
         setIsDialogOpen(false);
         setIsRemoveSuccess(false);
@@ -54,7 +62,7 @@ export default function WishlistItem({ item, onUpdate }: WishlistItemProps) {
     <div
       className={`grid grid-cols-1 md:grid-cols-12 gap-4 p-4 md:px-6 md:py-5 items-center hover:bg-gray-50/50 transition-colors ${isRemoving ? "opacity-60 pointer-events-none" : ""}`}
     >
-      {/* المنتج */}
+      {/* Product Info Section */}
       <div className="md:col-span-6 flex items-center gap-4">
         <Link
           href={`/products/${item.id}`}
@@ -78,7 +86,7 @@ export default function WishlistItem({ item, onUpdate }: WishlistItemProps) {
         </div>
       </div>
 
-      {/* السعر */}
+      {/* Pricing Section */}
       <div className="md:col-span-2 flex md:justify-center items-center gap-2">
         <span className="md:hidden text-sm text-gray-500">Price:</span>
         <div className="text-right md:text-center">
@@ -86,7 +94,7 @@ export default function WishlistItem({ item, onUpdate }: WishlistItemProps) {
         </div>
       </div>
 
-      {/* الحالة (Stock) */}
+      {/* Stock Status Section */}
       <div className="md:col-span-2 flex md:justify-center">
         <span className="md:hidden text-sm text-gray-500 mr-2">Status:</span>
         {item.quantity > 0 ? (
@@ -102,18 +110,19 @@ export default function WishlistItem({ item, onUpdate }: WishlistItemProps) {
         )}
       </div>
 
-      {/* الأكشنز (Add to Cart + Remove) */}
+      {/* Actions Section: Add to Cart & Remove */}
       <div className="md:col-span-2 flex items-center gap-2 md:justify-center">
         <AddToCartBtn prodId={item.id} variant="text" />
 
-        {/* مودال المسح */}
+        {/* Item Removal Confirmation Dialog */}
         <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <AlertDialogTrigger className="w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50 transition-all disabled:opacity-50 bg-white p-0 cursor-pointer">
+          <AlertDialogTrigger className="w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50 transition-all disabled:opacity-50 bg-white p-0 cursor-pointer outline-none">
             <Trash2 size={18} />
           </AlertDialogTrigger>
 
           <AlertDialogContent>
             {isRemoveSuccess ? (
+              /* Success Animation View */
               <div className="flex flex-col items-center justify-center py-6 text-center">
                 <CheckCircle2 className="w-16 h-16 text-green-500 mb-4 animate-bounce" />
                 <AlertDialogTitle className="text-xl">
@@ -125,6 +134,7 @@ export default function WishlistItem({ item, onUpdate }: WishlistItemProps) {
                 </AlertDialogDescription>
               </div>
             ) : (
+              /* Confirmation Prompt View */
               <>
                 <AlertDialogHeader>
                   <AlertDialogTitle>Remove from Wishlist</AlertDialogTitle>
@@ -137,13 +147,16 @@ export default function WishlistItem({ item, onUpdate }: WishlistItemProps) {
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel disabled={isRemoving}>
+                  <AlertDialogCancel
+                    disabled={isRemoving}
+                    className="cursor-pointer"
+                  >
                     Keep it
                   </AlertDialogCancel>
                   <AlertDialogAction
                     onClick={handleRemove}
                     disabled={isRemoving}
-                    className="bg-red-600 hover:bg-red-700 text-white w-28 flex justify-center transition-all"
+                    className="bg-red-600 hover:bg-red-700 text-white w-28 flex justify-center transition-all cursor-pointer"
                   >
                     {isRemoving ? (
                       <Loader2 className="animate-spin" size={18} />

@@ -6,24 +6,23 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Heart,
-  Home,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Heart, Home } from "lucide-react";
 import Link from "next/link";
 import { FaHeart } from "react-icons/fa";
 import { getWishlist } from "@/actions/wishlist.action";
 import { WishlistProduct, WishlistResponse } from "@/types/wishlist.type";
 import WishlistItem from "./_components/WishlistItem";
-import Loading from './../loading';
+import Loading from "./../loading";
 
 export default function Wishlist() {
+  // Local state for wishlist data and view management
   const [products, setProducts] = useState<WishlistProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [wishlistCount, setWishlistCount] = useState(0);
 
+  /**
+   * Fetches the user's wishlist from the server action
+   */
   async function fetchWishlist() {
     try {
       setLoading(true);
@@ -39,16 +38,19 @@ export default function Wishlist() {
     }
   }
 
+  // Load wishlist data on component mount
   useEffect(() => {
     fetchWishlist();
   }, []);
 
-  // 🌟 سطر واحد بس للتحميل! 🌟
+  // Display global loading spinner during data fetch
   if (loading) return <Loading />;
 
   return (
     <div className="min-h-screen bg-gray-50/50">
-      {/* 🌟 حالة السلة الفارغة 🌟 */}
+      {/* Conditional Rendering: 
+          Case 1: Empty Wishlist state 
+      */}
       {products.length === 0 ? (
         <div className="container mx-auto px-4 py-20">
           <div className="max-w-sm mx-auto text-center">
@@ -76,8 +78,10 @@ export default function Wishlist() {
           </div>
         </div>
       ) : (
-        /* 🌟 حالة وجود منتجات 🌟 */
+        /* Case 2: Populated Wishlist state
+         */
         <>
+          {/* Header Section with Breadcrumbs and Stats */}
           <div className="bg-white border-b border-gray-100">
             <div className="container mx-auto px-4 py-8">
               <nav className="flex items-center gap-2 text-sm text-gray-500 mb-4">
@@ -102,6 +106,7 @@ export default function Wishlist() {
                   </BreadcrumbList>
                 </Breadcrumb>
               </nav>
+
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center">
@@ -111,32 +116,39 @@ export default function Wishlist() {
                     <h1 className="text-2xl font-bold text-gray-900">
                       My Wishlist
                     </h1>
-                    <p className="text-gray-500 text-sm">{wishlistCount} items saved</p>
+                    <p className="text-gray-500 text-sm">
+                      {wishlistCount} items saved
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
+          {/* Main List Table */}
           <div className="container mx-auto px-4 py-8">
             <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+              {/* Desktop Table Header */}
               <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-gray-50 border-b border-gray-100 text-sm font-medium text-gray-500">
                 <div className="col-span-6">Product</div>
                 <div className="col-span-2 text-center">Price</div>
                 <div className="col-span-2 text-center">Status</div>
                 <div className="col-span-2 text-center">Actions</div>
               </div>
+
+              {/* Wishlist Items List */}
               <div className="divide-y divide-gray-100">
                 {products.map((item) => (
-                  <WishlistItem 
-                    key={item.id} 
-                    item={item} 
-                    onUpdate={fetchWishlist} 
+                  <WishlistItem
+                    key={item.id}
+                    item={item}
+                    onUpdate={fetchWishlist}
                   />
                 ))}
               </div>
             </div>
-            
+
+            {/* Footer Navigation */}
             <div className="mt-8 flex items-center justify-between">
               <Link
                 href="/products"

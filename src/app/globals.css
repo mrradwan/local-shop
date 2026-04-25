@@ -1,15 +1,23 @@
+/* --- Tailwind V4 & Shadcn Global Imports --- */
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* Custom variant for dark mode scoping */
 @custom-variant dark (&:is(.dark *));
 
+/* --- Theme Configuration (Tailwind V4 Alpha Style) --- */
 @theme inline {
+  /* Dynamic System Colors mapped to CSS Variables */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  /* Font Family Definitions */
   --font-sans: var(--font-exo), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
+
+  /* Sidebar-specific tokens */
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -18,11 +26,15 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
+
+  /* Chart colors for data visualization */
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
   --color-chart-2: var(--chart-2);
   --color-chart-1: var(--chart-1);
+
+  /* UI Element colors */
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -39,6 +51,8 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+
+  /* Dynamic Border Radius Scale */
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -48,6 +62,7 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* --- Light Mode Color Tokens (OKLCH Format) --- */
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -83,6 +98,7 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* --- Dark Mode Color Tokens --- */
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -117,6 +133,7 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* --- Global Base Styles --- */
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -125,34 +142,40 @@
     @apply bg-background text-foreground font-sans antialiased;
   }
 }
+
+/* --- Custom Animations --- */
+/**
+ * Float animation for subtle vertical movement
+ */
 @keyframes float {
   0% {
     transform: translateY(0px);
-    -webkit-transform: translateY(0px);
-    -moz-transform: translateY(0px);
-    -ms-transform: translateY(0px);
-    -o-transform: translateY(0px);
   }
   50% {
     transform: translateY(-25px);
-    -webkit-transform: translateY(-25px);
-    -moz-transform: translateY(-25px);
-    -ms-transform: translateY(-25px);
-    -o-transform: translateY(-25px);
   }
   100% {
     transform: translateY(0px);
-    -webkit-transform: translateY(0px);
-    -moz-transform: translateY(0px);
-    -ms-transform: translateY(0px);
-    -o-transform: translateY(0px);
   }
 }
+
+/* --- Helper Utilities --- */
 @layer utilities {
+  /**
+   * Hide scrollbars across different browsers while maintaining scroll functionality
+   */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
   .no-scrollbar {
+    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }

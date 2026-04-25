@@ -3,23 +3,19 @@ import PageHeader from "@/components/shared/PageHeader";
 import {
   FaArrowRotateLeft,
   FaCreditCard,
-  FaDatabase,
   FaFileContract,
   FaHandshake,
   FaIdCard,
-  FaLock,
   FaScaleBalanced,
-  FaShareNodes,
-  FaShieldHalved,
   FaTruck,
   FaUserCheck,
-  FaUserShield,
 } from "react-icons/fa6";
-import { FaClock, FaCookie } from "react-icons/fa";
 import { IoIosMail } from "react-icons/io";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+
 export default function Terms() {
+  // Page Header Configuration
   const pageDetails = {
     title: "Terms of Service",
     parentName: "",
@@ -28,11 +24,15 @@ export default function Terms() {
     icon: <FaFileContract size={28} className="text-white" />,
     description: "Last updated: February 2026",
   };
+
   return (
     <>
       <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
+        {/* Reusable Page Header */}
         <PageHeader details={pageDetails} hasFilters={false} />
+
         <div className="container mx-auto px-4 py-12">
+          {/* Important Notice Highlight */}
           <div className="bg-linear-to-r from-amber-50 to-amber-100/50 border border-amber-200 rounded-3xl p-6 sm:p-8 mb-12 shadow-sm">
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-2xl bg-amber-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-amber-500/25">
@@ -50,7 +50,9 @@ export default function Terms() {
               </div>
             </div>
           </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+            {/* Article 1: Acceptance of Terms */}
             <section className="bg-white rounded-3xl border border-gray-100 p-6 sm:p-8 shadow-sm hover:shadow-lg hover:border-green-100 transition-all duration-300 group">
               <div className="flex items-start gap-4 mb-5">
                 <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-green-100 to-green-50 flex items-center justify-center shrink-0 group-hover:from-green-500 group-hover:to-green-400 transition-all duration-300">
@@ -65,37 +67,30 @@ export default function Terms() {
                   </h2>
                 </div>
               </div>
-              <div className="space-y-3">
-                <div className="flex items-start gap-3 text-gray-600 leading-relaxed">
-                  <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-md mt-0.5 shrink-0">
-                    1.1
-                  </span>
-                  <p className="text-sm">
-                    By accessing or using the Service, you acknowledge that you
-                    have read, understood, and agree to be bound by these Terms.
+              <div className="space-y-3 text-sm text-gray-600">
+                <div className="flex items-start gap-3">
+                  <span className="font-bold text-green-500">1.1</span>
+                  <p>
+                    By using the Service, you agree to be bound by these Terms.
                   </p>
                 </div>
-                <div className="flex items-start gap-3 text-gray-600 leading-relaxed">
-                  <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-md mt-0.5 shrink-0">
-                    1.2
-                  </span>
-                  <p className="text-sm">
-                    If you do not agree to these Terms, you must not access or
-                    use the Service.
+                <div className="flex items-start gap-3">
+                  <span className="font-bold text-green-500">1.2</span>
+                  <p>
+                    If you disagree with any part of the terms, you may not
+                    access the service.
                   </p>
                 </div>
-                <div className="flex items-start gap-3 text-gray-600 leading-relaxed">
-                  <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-md mt-0.5 shrink-0">
-                    1.3
-                  </span>
-                  <p className="text-sm">
-                    We reserve the right to modify these Terms at any time, and
-                    such modifications shall be effective immediately upon
-                    posting.
+                <div className="flex items-start gap-3">
+                  <span className="font-bold text-green-500">1.3</span>
+                  <p>
+                    We may modify these terms at any time without prior notice.
                   </p>
                 </div>
               </div>
             </section>
+
+            {/* Article 2: User Eligibility */}
             <section className="bg-white rounded-3xl border border-gray-100 p-6 sm:p-8 shadow-sm hover:shadow-lg hover:border-green-100 transition-all duration-300 group">
               <div className="flex items-start gap-4 mb-5">
                 <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-green-100 to-green-50 flex items-center justify-center shrink-0 group-hover:from-green-500 group-hover:to-green-400 transition-all duration-300">
@@ -110,37 +105,24 @@ export default function Terms() {
                   </h2>
                 </div>
               </div>
-              <div className="space-y-3">
-                <div className="flex items-start gap-3 text-gray-600 leading-relaxed">
-                  <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-md mt-0.5 shrink-0">
-                    2.1
-                  </span>
-                  <p className="text-sm">
-                    The Service is intended for users who are at least eighteen
-                    (18) years of age.
+              <div className="space-y-3 text-sm text-gray-600">
+                <div className="flex items-start gap-3">
+                  <span className="font-bold text-green-500">2.1</span>
+                  <p>
+                    Users must be at least 18 years old to use this service.
                   </p>
                 </div>
-                <div className="flex items-start gap-3 text-gray-600 leading-relaxed">
-                  <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-md mt-0.5 shrink-0">
-                    2.2
-                  </span>
-                  <p className="text-sm">
-                    By using the Service, you represent and warrant that you are
-                    of legal age to form a binding contract.
-                  </p>
-                </div>
-                <div className="flex items-start gap-3 text-gray-600 leading-relaxed">
-                  <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-md mt-0.5 shrink-0">
-                    2.3
-                  </span>
-                  <p className="text-sm">
-                    If you are accessing the Service on behalf of a legal
-                    entity, you represent that you have the authority to bind
-                    such entity.
+                <div className="flex items-start gap-3">
+                  <span className="font-bold text-green-500">2.2</span>
+                  <p>
+                    You warrant that you have the legal capacity to enter into
+                    this agreement.
                   </p>
                 </div>
               </div>
             </section>
+
+            {/* Article 3: Account Registration */}
             <section className="bg-white rounded-3xl border border-gray-100 p-6 sm:p-8 shadow-sm hover:shadow-lg hover:border-green-100 transition-all duration-300 group">
               <div className="flex items-start gap-4 mb-5">
                 <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-green-100 to-green-50 flex items-center justify-center shrink-0 group-hover:from-green-500 group-hover:to-green-400 transition-all duration-300">
@@ -155,45 +137,21 @@ export default function Terms() {
                   </h2>
                 </div>
               </div>
-              <div className="space-y-3">
-                <div className="flex items-start gap-3 text-gray-600 leading-relaxed">
-                  <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-md mt-0.5 shrink-0">
-                    3.1
-                  </span>
-                  <p className="text-sm">
-                    You may be required to create an account to access certain
-                    features of the Service.
-                  </p>
+              <div className="space-y-3 text-sm text-gray-600">
+                <div className="flex items-start gap-3">
+                  <span className="font-bold text-green-500">3.1</span>
+                  <p>Accurate registration information is required.</p>
                 </div>
-                <div className="flex items-start gap-3 text-gray-600 leading-relaxed">
-                  <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-md mt-0.5 shrink-0">
-                    3.2
-                  </span>
-                  <p className="text-sm">
-                    You agree to provide accurate, current, and complete
-                    information during registration.
-                  </p>
-                </div>
-                <div className="flex items-start gap-3 text-gray-600 leading-relaxed">
-                  <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-md mt-0.5 shrink-0">
-                    3.3
-                  </span>
-                  <p className="text-sm">
-                    You are solely responsible for maintaining the
-                    confidentiality of your account credentials.
-                  </p>
-                </div>
-                <div className="flex items-start gap-3 text-gray-600 leading-relaxed">
-                  <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-md mt-0.5 shrink-0">
-                    3.4
-                  </span>
-                  <p className="text-sm">
-                    You agree to notify us immediately of any unauthorized use
-                    of your account.
+                <div className="flex items-start gap-3">
+                  <span className="font-bold text-green-500">3.2</span>
+                  <p>
+                    You are responsible for maintaining account confidentiality.
                   </p>
                 </div>
               </div>
             </section>
+
+            {/* Article 4: Orders and Payments */}
             <section className="bg-white rounded-3xl border border-gray-100 p-6 sm:p-8 shadow-sm hover:shadow-lg hover:border-green-100 transition-all duration-300 group">
               <div className="flex items-start gap-4 mb-5">
                 <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-green-100 to-green-50 flex items-center justify-center shrink-0 group-hover:from-green-500 group-hover:to-green-400 transition-all duration-300">
@@ -208,45 +166,21 @@ export default function Terms() {
                   </h2>
                 </div>
               </div>
-              <div className="space-y-3">
-                <div className="flex items-start gap-3 text-gray-600 leading-relaxed">
-                  <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-md mt-0.5 shrink-0">
-                    4.1
-                  </span>
-                  <p className="text-sm">
-                    All orders placed through the Service are subject to
-                    acceptance and availability.
-                  </p>
+              <div className="space-y-3 text-sm text-gray-600">
+                <div className="flex items-start gap-3">
+                  <span className="font-bold text-green-500">4.1</span>
+                  <p>All orders are subject to availability and acceptance.</p>
                 </div>
-                <div className="flex items-start gap-3 text-gray-600 leading-relaxed">
-                  <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-md mt-0.5 shrink-0">
-                    4.2
-                  </span>
-                  <p className="text-sm">
-                    Prices are subject to change without notice prior to order
-                    confirmation.
-                  </p>
-                </div>
-                <div className="flex items-start gap-3 text-gray-600 leading-relaxed">
-                  <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-md mt-0.5 shrink-0">
-                    4.3
-                  </span>
-                  <p className="text-sm">
-                    Payment must be made in full at the time of purchase through
-                    approved payment methods.
-                  </p>
-                </div>
-                <div className="flex items-start gap-3 text-gray-600 leading-relaxed">
-                  <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-md mt-0.5 shrink-0">
-                    4.4
-                  </span>
-                  <p className="text-sm">
-                    We reserve the right to refuse or cancel any order at our
-                    sole discretion.
+                <div className="flex items-start gap-3">
+                  <span className="font-bold text-green-500">4.2</span>
+                  <p>
+                    Payment must be completed through approved payment methods.
                   </p>
                 </div>
               </div>
             </section>
+
+            {/* Article 5: Shipping and Delivery */}
             <section className="bg-white rounded-3xl border border-gray-100 p-6 sm:p-8 shadow-sm hover:shadow-lg hover:border-green-100 transition-all duration-300 group">
               <div className="flex items-start gap-4 mb-5">
                 <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-green-100 to-green-50 flex items-center justify-center shrink-0 group-hover:from-green-500 group-hover:to-green-400 transition-all duration-300">
@@ -261,35 +195,21 @@ export default function Terms() {
                   </h2>
                 </div>
               </div>
-              <div className="space-y-3">
-                <div className="flex items-start gap-3 text-gray-600 leading-relaxed">
-                  <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-md mt-0.5 shrink-0">
-                    5.1
-                  </span>
-                  <p className="text-sm">
-                    Shipping times are estimates only and are not guaranteed.
-                  </p>
+              <div className="space-y-3 text-sm text-gray-600">
+                <div className="flex items-start gap-3">
+                  <span className="font-bold text-green-500">5.1</span>
+                  <p>Estimated delivery times are not guaranteed.</p>
                 </div>
-                <div className="flex items-start gap-3 text-gray-600 leading-relaxed">
-                  <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-md mt-0.5 shrink-0">
-                    5.2
-                  </span>
-                  <p className="text-sm">
-                    Risk of loss and title for items purchased pass to you upon
-                    delivery to the carrier.
-                  </p>
-                </div>
-                <div className="flex items-start gap-3 text-gray-600 leading-relaxed">
-                  <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-md mt-0.5 shrink-0">
-                    5.3
-                  </span>
-                  <p className="text-sm">
-                    We are not responsible for delays caused by carriers,
-                    customs, or other factors beyond our control.
+                <div className="flex items-start gap-3">
+                  <span className="font-bold text-green-500">5.2</span>
+                  <p>
+                    We are not liable for carrier delays beyond our control.
                   </p>
                 </div>
               </div>
             </section>
+
+            {/* Article 6: Returns and Refunds */}
             <section className="bg-white rounded-3xl border border-gray-100 p-6 sm:p-8 shadow-sm hover:shadow-lg hover:border-green-100 transition-all duration-300 group">
               <div className="flex items-start gap-4 mb-5">
                 <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-green-100 to-green-50 flex items-center justify-center shrink-0 group-hover:from-green-500 group-hover:to-green-400 transition-all duration-300">
@@ -304,35 +224,18 @@ export default function Terms() {
                   </h2>
                 </div>
               </div>
-              <div className="space-y-3">
-                <div className="flex items-start gap-3 text-gray-600 leading-relaxed">
-                  <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-md mt-0.5 shrink-0">
-                    6.1
-                  </span>
-                  <p className="text-sm">
-                    Our return policy allows returns within 14 days of delivery
-                    for most items.
-                  </p>
-                </div>
-                <div className="flex items-start gap-3 text-gray-600 leading-relaxed">
-                  <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-md mt-0.5 shrink-0">
-                    6.2
-                  </span>
-                  <p className="text-sm">
-                    Products must be unused and in original packaging.
-                  </p>
-                </div>
-                <div className="flex items-start gap-3 text-gray-600 leading-relaxed">
-                  <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-md mt-0.5 shrink-0">
-                    6.3
-                  </span>
-                  <p className="text-sm">
-                    Refunds will be processed within 5-7 business days after
-                    receiving the returned item.
+              <div className="space-y-3 text-sm text-gray-600">
+                <div className="flex items-start gap-3">
+                  <span className="font-bold text-green-500">6.1</span>
+                  <p>
+                    Returns are accepted within 14 days of delivery for most
+                    items.
                   </p>
                 </div>
               </div>
             </section>
+
+            {/* Article 7: Limitation of Liability */}
             <section className="bg-white rounded-3xl border border-gray-100 p-6 sm:p-8 shadow-sm hover:shadow-lg hover:border-green-100 transition-all duration-300 group">
               <div className="flex items-start gap-4 mb-5">
                 <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-green-100 to-green-50 flex items-center justify-center shrink-0 group-hover:from-green-500 group-hover:to-green-400 transition-all duration-300">
@@ -348,12 +251,12 @@ export default function Terms() {
                 </div>
               </div>
               <p className="text-sm text-gray-600 leading-relaxed">
-                To the maximum extent permitted by applicable law, FreshCart
-                shall not be liable for any indirect, incidental, special,
-                consequential, or punitive damages, or any loss of profits or
-                revenues, whether incurred directly or indirectly.
+                FreshCart shall not be liable for any indirect, incidental, or
+                consequential damages resulting from the use of our services.
               </p>
             </section>
+
+            {/* Article 8: Contact Section */}
             <section className="bg-white rounded-3xl border border-gray-100 p-6 sm:p-8 shadow-sm hover:shadow-lg hover:border-green-100 transition-all duration-300 group">
               <div className="flex items-start gap-4 mb-5">
                 <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-green-100 to-green-50 flex items-center justify-center shrink-0 group-hover:from-green-500 group-hover:to-green-400 transition-all duration-300">
@@ -369,18 +272,18 @@ export default function Terms() {
                 </div>
               </div>
               <p className="text-sm text-gray-600 leading-relaxed">
-                If you have any questions about these Terms, please contact us
-                at
+                For questions regarding these terms, please contact us at:
                 <a
-                  href="mailto:privacy@freshcart.com"
-                  className="text-green-600 hover:text-green-700 font-semibold hover:underline"
+                  href="mailto:support@freshcart.com"
+                  className="text-green-600 hover:text-green-700 font-semibold hover:underline ms-1"
                 >
-                  {" "}
                   support@freshcart.com
                 </a>
               </p>
             </section>
           </div>
+
+          {/* Footer Navigation Links */}
           <div className="mt-12 pt-8 border-t border-gray-200">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <Link

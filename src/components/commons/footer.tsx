@@ -1,4 +1,12 @@
-import { Headset, Mail, MapPin, Phone, RotateCcw, ShieldHalf, Van } from "lucide-react";
+import {
+  Headset,
+  Mail,
+  MapPin,
+  Phone,
+  RotateCcw,
+  ShieldHalf,
+  Van,
+} from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import {
@@ -15,9 +23,11 @@ import { TfiShoppingCart } from "react-icons/tfi";
 export default function Footer() {
   return (
     <>
-          <div className="bg-green-50 border-y border-green-100">
+      {/* --- Trust Badges & Service Features Section --- */}
+      <div className="bg-green-50 border-y border-green-100">
         <div className="container mx-auto px-4 py-6">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Free Shipping Badge */}
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
                 <Van size={26} className="text-green-600" />
@@ -29,6 +39,7 @@ export default function Footer() {
                 <p className="text-gray-500 text-xs">On orders over 500 EGP</p>
               </div>
             </div>
+            {/* Returns Badge */}
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
                 <RotateCcw size={26} className="text-green-600" />
@@ -40,6 +51,7 @@ export default function Footer() {
                 <p className="text-gray-500 text-xs">14-day return policy</p>
               </div>
             </div>
+            {/* Security Badge */}
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
                 <ShieldHalf size={26} className="text-green-600" />
@@ -51,6 +63,7 @@ export default function Footer() {
                 <p className="text-gray-500 text-xs">100% secure checkout</p>
               </div>
             </div>
+            {/* Support Badge */}
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
                 <Headset size={26} className="text-green-600" />
@@ -65,9 +78,11 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
       <footer className="bg-gray-900 text-white">
         <div className="container mx-auto px-4 py-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12">
+            {/* --- Brand Profile & Contact Info --- */}
             <div className="md:col-span-2 lg:col-span-4">
               <Link href="/" className="inline-block mb-6">
                 <div className="bg-white rounded-lg px-4 py-2 inline-block">
@@ -82,6 +97,7 @@ export default function Footer() {
                 From fashion to electronics, we bring you the best brands at
                 competitive prices with a seamless shopping experience.
               </p>
+              {/* Contact Details */}
               <div className="space-y-3 mb-6">
                 <a
                   href="tel:+18001234567"
@@ -105,6 +121,7 @@ export default function Footer() {
                   <span>123 Commerce Street, New York, NY 10001</span>
                 </div>
               </div>
+              {/* Social Media Links */}
               <div className="flex items-center gap-3">
                 <a
                   href="#"
@@ -133,8 +150,11 @@ export default function Footer() {
               </div>
             </div>
 
+            {/* --- Shop Quick Links --- */}
             <div className="lg:col-span-2">
-              <h3 className="font-semibold text-lg mb-5">Shop</h3>
+              <h3 className="font-semibold text-lg mb-5 border-b border-gray-800 pb-2">
+                Shop
+              </h3>
               <ul className="space-y-3">
                 <li>
                   <Link
@@ -168,27 +188,14 @@ export default function Footer() {
                     Electronics
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    href="/products?category=6439d2d167d9aa4ca970649f"
-                    className="text-gray-400 hover:text-green-400 transition-colors text-sm"
-                  >
-                    Mens Fashion
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/products?category=6439d5b90049ad0b52b90048"
-                    className="text-gray-400 hover:text-green-400 transition-colors text-sm"
-                  >
-                    Womens Fashion
-                  </Link>
-                </li>
               </ul>
             </div>
 
+            {/* --- Account Management Links --- */}
             <div className="lg:col-span-2">
-              <h3 className="font-semibold text-lg mb-5">Account</h3>
+              <h3 className="font-semibold text-lg mb-5 border-b border-gray-800 pb-2">
+                Account
+              </h3>
               <ul className="space-y-3">
                 <li>
                   <Link
@@ -196,14 +203,6 @@ export default function Footer() {
                     className="text-gray-400 hover:text-green-400 transition-colors text-sm"
                   >
                     My Account
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/profile/orders"
-                    className="text-gray-400 hover:text-green-400 transition-colors text-sm"
-                  >
-                    Order History
                   </Link>
                 </li>
                 <li>
@@ -222,27 +221,14 @@ export default function Footer() {
                     Shopping Cart
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    href="/login"
-                    className="text-gray-400 hover:text-green-400 transition-colors text-sm"
-                  >
-                    Sign In
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/register"
-                    className="text-gray-400 hover:text-green-400 transition-colors text-sm"
-                  >
-                    Create Account
-                  </Link>
-                </li>
               </ul>
             </div>
 
+            {/* --- Support & Help Links --- */}
             <div className="lg:col-span-2">
-              <h3 className="font-semibold text-lg mb-5">Support</h3>
+              <h3 className="font-semibold text-lg mb-5 border-b border-gray-800 pb-2">
+                Support
+              </h3>
               <ul className="space-y-3">
                 <li>
                   <Link
@@ -250,14 +236,6 @@ export default function Footer() {
                     className="text-gray-400 hover:text-green-400 transition-colors text-sm"
                   >
                     Contact Us
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/help"
-                    className="text-gray-400 hover:text-green-400 transition-colors text-sm"
-                  >
-                    Help Center
                   </Link>
                 </li>
                 <li>
@@ -276,19 +254,14 @@ export default function Footer() {
                     Returns & Refunds
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    href="/track-order"
-                    className="text-gray-400 hover:text-green-400 transition-colors text-sm"
-                  >
-                    Track Order
-                  </Link>
-                </li>
               </ul>
             </div>
 
+            {/* --- Legal & Policy Links --- */}
             <div className="lg:col-span-2">
-              <h3 className="font-semibold text-lg mb-5">Legal</h3>
+              <h3 className="font-semibold text-lg mb-5 border-b border-gray-800 pb-2">
+                Legal
+              </h3>
               <ul className="space-y-3">
                 <li>
                   <Link
@@ -306,26 +279,18 @@ export default function Footer() {
                     Terms of Service
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    href="/cookies"
-                    className="text-gray-400 hover:text-green-400 transition-colors text-sm"
-                  >
-                    Cookie Policy
-                  </Link>
-                </li>
               </ul>
             </div>
           </div>
         </div>
 
+        {/* --- Copyright & Payment Gateway Icons --- */}
         <div className="border-t border-gray-800">
           <div className="container mx-auto px-4 py-6">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-gray-500 text-sm text-center md:text-left">
                 © 2026 FreshCart. All rights reserved.
               </p>
-
               <div className="flex items-center gap-4 text-gray-500">
                 <FaCcVisa
                   className="text-3xl hover:text-green-400 transition-colors"

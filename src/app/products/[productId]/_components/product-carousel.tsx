@@ -15,14 +15,17 @@ interface ProductCarouselProps {
 }
 
 export default function ProductCarousel({ images }: ProductCarouselProps) {
+  // Initialize Autoplay plugin with 3s delay and interaction handling
   const plugin = useRef(Autoplay({ delay: 3000, stopOnInteraction: true }));
 
+  // Guard clause for empty image array
   if (!images || images.length === 0) return null;
 
   return (
     <Carousel
       plugins={[plugin.current]}
       className="w-full max-w-xs mx-auto"
+      // Pause autoplay on hover and reset when leaving
       onMouseEnter={plugin.current.stop}
       onMouseLeave={plugin.current.reset}
     >
@@ -38,6 +41,7 @@ export default function ProductCarousel({ images }: ProductCarouselProps) {
                     width={400}
                     height={400}
                     className="object-contain w-full h-full hover:scale-105 transition-transform duration-300"
+                    // Optimization: Set priority for the first image to reduce LCP
                     priority={index === 0}
                   />
                 </CardContent>

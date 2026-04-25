@@ -17,11 +17,16 @@ import Loading from "../loading";
 import OrderSummary from "@/components/shared/OrderSummary";
 
 export default function Cart() {
+  // Component States
   const [products, setProducts] = useState<CartItemType[]>([]);
   const [loading, setLoading] = useState(true);
   const [cartCount, setCartCount] = useState(0);
   const [cartTotal, setCartTotal] = useState(0);
   const [cartId, setCartId] = useState("");
+
+  /**
+   * Fetches all products in the user's cart from the server action
+   */
   async function getAllProductCart() {
     try {
       setLoading(true);
@@ -39,12 +44,17 @@ export default function Cart() {
     }
   }
 
+  // Load cart data on component mount
   useEffect(() => {
     getAllProductCart();
   }, []);
+
+  // Display loading spinner while fetching data
   if (loading) {
     return <Loading />;
   }
+
+  // Display empty state if cart has no products
   if (products.length === 0) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center px-4">
@@ -77,11 +87,11 @@ export default function Cart() {
     );
   }
 
-  // حالة عرض المنتجات
+  // Render cart items and order summary
   return (
     <div className="bg-gray-50 min-h-screen py-8">
       <div className="container mx-auto px-4">
-        {/* Breadcrumbs */}
+        {/* Navigation Breadcrumbs */}
         <nav className="flex items-center gap-2 text-sm text-gray-500 mb-4">
           <Breadcrumb>
             <BreadcrumbList>
@@ -105,7 +115,7 @@ export default function Cart() {
           </Breadcrumb>
         </nav>
 
-        {/* Title Section */}
+        {/* Page Header and Cart Stats */}
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
@@ -124,8 +134,9 @@ export default function Cart() {
           </div>
         </div>
 
-        {/* Products List */}
+        {/* Cart Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column: Product List */}
           <div className="lg:col-span-2">
             <div className="space-y-4">
               {products.map((item) => (
@@ -136,6 +147,8 @@ export default function Cart() {
                 />
               ))}
             </div>
+
+            {/* Footer Actions */}
             <div className="mt-6 pt-6 border-t border-gray-200 flex items-center justify-between">
               <Link
                 href="/"
@@ -150,6 +163,8 @@ export default function Cart() {
               <ClearCartButton onUpdate={getAllProductCart} />
             </div>
           </div>
+
+          {/* Right Column: Checkout Summary */}
           <div className="lg:col-span-1">
             <OrderSummary
               itemCount={cartCount}

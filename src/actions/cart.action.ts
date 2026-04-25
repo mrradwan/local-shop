@@ -2,12 +2,16 @@
 
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
-import { CustomSession } from "@/types/order.type"; // Ensure this contains your extended session type
+import { CustomSession } from "@/types/order.type";
 
+/**
+ * Base URL for Cart API
+ */
 const CART_API_URL = "https://ecommerce.routemisr.com/api/v2/cart";
 
 /**
- * Add a specific product to the user's cart
+ * Add a new product to the authenticated user's cart
+ * @param productId - ID of the product to add
  */
 export async function addProductToCart(productId: string) {
   const session = (await getServerSession(authOptions)) as CustomSession | null;
@@ -29,7 +33,7 @@ export async function addProductToCart(productId: string) {
 }
 
 /**
- * Retrieve all products currently in the user's cart
+ * Fetch all items currently in the user's cart
  */
 export async function getCart() {
   const session = (await getServerSession(authOptions)) as CustomSession | null;
@@ -43,14 +47,16 @@ export async function getCart() {
     headers: { 
       "token": session.token 
     },
-    cache: "no-store", // Ensure we always get the latest cart data
+    cache: "no-store", // Bypass cache to ensure data accuracy
   });
 
   return await response.json();
 }
 
 /**
- * Update the quantity (count) of a specific item in the cart
+ * Update the quantity of a specific product in the cart
+ * @param productId - Target product ID
+ * @param count - New quantity to set
  */
 export async function updateCartItemQuantity(productId: string, count: number) {
   const session = (await getServerSession(authOptions)) as CustomSession | null;
@@ -72,7 +78,8 @@ export async function updateCartItemQuantity(productId: string, count: number) {
 }
 
 /**
- * Remove a single item from the cart using its product ID
+ * Delete a single product from the cart
+ * @param productId - ID of the product to remove
  */
 export async function removeCartItem(productId: string) {
   const session = (await getServerSession(authOptions)) as CustomSession | null;
@@ -92,7 +99,7 @@ export async function removeCartItem(productId: string) {
 }
 
 /**
- * Completely clear all items from the user's cart
+ * Clear the entire cart by removing all products
  */
 export async function clearCart() {
   const session = (await getServerSession(authOptions)) as CustomSession | null;

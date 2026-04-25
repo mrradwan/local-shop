@@ -21,6 +21,8 @@ import { PasswordInput } from "@/components/password/password-input";
 
 export default function Register() {
   const router = useRouter();
+
+  // Initialize form with Zod validation schema
   const form = useForm({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -32,9 +34,15 @@ export default function Register() {
       terms: false,
     },
   });
+
   const { isSubmitting } = form.formState;
   const watchPassword = form.watch("password", "");
 
+  /**
+   * Calculates password strength score based on length and characters
+   * @param password - The password string to evaluate
+   * @returns score from 0 to 4
+   */
   const calculatePasswordStrength = (password: string): number => {
     let score = 0;
     if (!password) return score;
@@ -43,16 +51,17 @@ export default function Register() {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
 
     if (passwordRegex.test(password))
-      score = 4; // 'Very Strong'
+      score = 4; // Very Strong
     else if (password.length >= 8)
-      score = 3; // 'Strong'
+      score = 3; // Strong
     else if (password.length >= 6)
-      score = 2; // 'Weak'
-    else if (password.length > 0) score = 1; // 'Very Weak'
+      score = 2; // Weak
+    else if (password.length > 0) score = 1; // Very Weak
 
     return score;
   };
 
+  // Strength meter configuration
   const strengthScore = calculatePasswordStrength(watchPassword);
   const strengthWords = ["", "Very Weak", "Weak", "Good", "Strong"];
 
@@ -71,6 +80,11 @@ export default function Register() {
     "text-yellow-600",
     "text-green-700",
   ];
+
+  /**
+   * Handles user registration submission
+   * @param data - The validated form data
+   */
   async function onSubmit(data: RegisterFormValues) {
     const response = await registerUser(data);
     if (response.message === "success") {
@@ -80,10 +94,12 @@ export default function Register() {
       toast.error(response.message || "Registration failed. Please try again.");
     }
   }
+
   return (
     <>
       <main className="py-10">
         <div className="container max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 p-4">
+          {/* Left Side: Features and Reviews */}
           <div>
             <h1 className="text-4xl font-bold">
               Welcome to <span className="text-green-600">FreshCart</span>
@@ -92,6 +108,7 @@ export default function Register() {
               Join thousands of happy customers who enjoy fresh groceries
               delivered right to their doorstep.
             </p>
+
             <ul className="*:flex *:items-start *:gap-4 space-y-6 my-8">
               <li>
                 <div className="icon size-12 text-lg bg-green-200 text-green-600 rounded-full flex justify-center items-center">
@@ -127,12 +144,15 @@ export default function Register() {
                 </div>
               </li>
             </ul>
+
             <div className="review bg-white shadow-sm p-4 rounded-md">
               <div className="author flex items-center gap-4 mb-4">
                 <ReviewCarousel />
               </div>
             </div>
           </div>
+
+          {/* Right Side: Registration Form */}
           <div className="bg-white rounded-2xl shadow-lg px-6 py-10">
             <h2 className="text-center text-3xl font-semibold mb-2">
               Create Your Account
@@ -140,21 +160,25 @@ export default function Register() {
             <p className="text-center">
               Start your fresh journey with us today
             </p>
+
+            {/* Social Authentication */}
             <div className="flex gap-2 *:grow my-10">
-              <Button className="text-black bg-transparent border border-gray-300 hover:bg-gray-100 flex justify-center items-center disabled:opacity-50 disabled:cursor-not-allowed">
+              <Button className="text-black bg-transparent border border-gray-300 hover:bg-gray-100 flex justify-center items-center cursor-pointer">
                 <FaGoogle className="me-2 text-red-600" />
                 <span>Google</span>
               </Button>
-              <Button className="text-black bg-transparent border border-gray-300 hover:bg-gray-100 flex justify-center items-center disabled:opacity-50 disabled:cursor-not-allowed">
+              <Button className="text-black bg-transparent border border-gray-300 hover:bg-gray-100 flex justify-center items-center cursor-pointer">
                 <FaFacebookF className="me-2 text-blue-600" />
                 <span>Facebook</span>
               </Button>
             </div>
+
             <div className="relative w-full h-0.5 bg-gray-300/30 my-4 flex items-center before:content-['or'] before:absolute before:top-1/2 before:left-1/2 before:-translate-1/2 before:bg-white before:px-4">
               <span className="sr-only">or</span>
             </div>
-            {/* Registration form can be added here */}
+
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-7">
+              {/* Name Field */}
               <Controller
                 name="name"
                 control={form.control}
@@ -169,13 +193,14 @@ export default function Register() {
                       placeholder="Mohamed"
                       autoComplete="off"
                     />
-
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
                   </Field>
                 )}
               />
+
+              {/* Email Field */}
               <Controller
                 name="email"
                 control={form.control}
@@ -190,13 +215,14 @@ export default function Register() {
                       placeholder="mohamed@example.com"
                       autoComplete="off"
                     />
-
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
                   </Field>
                 )}
               />
+
+              {/* Password Field with Strength Meter */}
               <Controller
                 name="password"
                 control={form.control}
@@ -209,6 +235,8 @@ export default function Register() {
                       aria-invalid={fieldState.invalid}
                       placeholder="Enter your password"
                     />
+
+                    {/* Password Strength Indicator */}
                     {watchPassword.length > 0 && (
                       <div className="mt-3 space-y-2">
                         <div className="flex items-center gap-1.5 h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
@@ -230,12 +258,15 @@ export default function Register() {
                         </p>
                       </div>
                     )}
+
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
                   </Field>
                 )}
               />
+
+              {/* Confirm Password Field */}
               <Controller
                 name="rePassword"
                 control={form.control}
@@ -250,13 +281,14 @@ export default function Register() {
                       aria-invalid={fieldState.invalid}
                       placeholder="Enter your password"
                     />
-
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
                   </Field>
                 )}
               />
+
+              {/* Phone Field */}
               <Controller
                 name="phone"
                 control={form.control}
@@ -271,13 +303,14 @@ export default function Register() {
                       placeholder="+12345678900"
                       autoComplete="off"
                     />
-
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
                   </Field>
                 )}
               />
+
+              {/* Terms and Conditions */}
               <Controller
                 name="terms"
                 control={form.control}
@@ -288,9 +321,9 @@ export default function Register() {
                         id="terms"
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        className="data-checked:border-green-600 data-checked:bg-green-600 data-checked:text-white dark:data-checked:bg-green-600 cursor-pointer"
+                        className="data-checked:border-green-600 data-checked:bg-green-600 data-checked:text-white cursor-pointer"
                       />
-                      <Label htmlFor="terms" className="ms-2">
+                      <Label htmlFor="terms" className="ms-2 cursor-pointer">
                         I agree to the{" "}
                         <Link
                           href="/terms"
@@ -314,10 +347,12 @@ export default function Register() {
                   </Field>
                 )}
               />
+
+              {/* Submit Button */}
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="btn bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed w-full transition-colors"
+                className="bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed w-full transition-colors cursor-pointer"
               >
                 {isSubmitting ? (
                   <Spinner data-icon="inline-start" />
@@ -329,6 +364,7 @@ export default function Register() {
                 </span>
               </Button>
             </form>
+
             <p className="border-t pt-10 border-gray-300/30 my-4 text-center">
               Already have an account?
               <Link
