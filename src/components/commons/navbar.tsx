@@ -199,7 +199,7 @@ export default function Navbar() {
                   <Field>
                     <ButtonGroup>
                       <Input
-                        className="text-lg focus-visible:border-green-600 focus-visible:ring-green-600 focus-visible:ring-1 focus-visible:outline-none"
+                        className="text-lg focus-visible:border-green-600 focus-visible:ring-green-600 focus-visible:ring-1 focus-visible:outline-none cursor-pointer"
                         id="input-button-group"
                         placeholder="Search for products, brands and more..."
                         value={navSearch}
