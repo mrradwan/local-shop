@@ -539,7 +539,7 @@ export default function Navbar() {
                       ) : session ? (
                         <div className="p-4 space-y-1 w-full">
                           <Link
-                            href="/profile"
+                            href="/profile/addresses"
                             className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-green-50 transition-colors"
                           >
                             <div className="flex items-center gap-3 py-2 px-1.5">
