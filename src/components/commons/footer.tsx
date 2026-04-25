@@ -199,7 +199,7 @@ export default function Footer() {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="/profile"
+                    href="/profile/addresses"
                     className="text-gray-400 hover:text-green-400 transition-colors text-sm"
                   >
                     My Account
